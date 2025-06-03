@@ -64,8 +64,37 @@ export default function Home() {
     <div className="min-h-screen bg-gray-900 text-gray-100 p-6 font-sans">
       <div className="max-w-2xl mx-auto bg-gray-800 p-8 rounded-xl shadow-lg">
         <h1 className="text-3xl font-bold mb-1 text-pink-400">🧠 Gaslight Detector</h1>
-        <p className="text-sm text-gray-400 mb-4">Paste any conversation (text, DM, email). We'll scan it for manipulation tactics.</p>
-        <p className="text-xs italic text-gray-500 mb-6">Built to catch the tactics they hope you won’t notice.</p>
+        {showOutput && (
+          <div className="mb-3 text-xs text-center text-gray-400">
+            Created by <span className="text-white font-semibold">OutPatiented</span>, built on <span className="text-white font-semibold">TruthEngine</span> — support us at <a href="https://coff.ee/truthengine" target="_blank" className="text-pink-400 underline">coff.ee/truthengine</a>
+          </div>
+        )}
+
+        <p className="text-sm text-gray-400 mb-2">This tool scans written communication for common psychological manipulation tactics.</p>
+        <p className="text-sm text-gray-400 mb-2">Paste a back-and-forth conversation (DMs, texts, emails) OR only the manipulator's responses. You can include context if needed to help clarify the dynamic.</p>
+        <p className="text-xs italic text-gray-500 mb-4">Context matters. The more you provide, the more accurate the result.</p>
+
+        {!showOutput && (
+          <div className="mb-4 text-sm text-gray-300">
+            <ul className="list-disc list-inside space-y-1">
+              <li><strong>What to Paste:</strong> Copy either full conversations or just the replies from the suspected manipulator.</li>
+              <li><strong>Best Format:</strong> Use line breaks between each message for clarity.</li>
+              <li><strong>Optional:</strong> Add extra background context below to improve interpretation.</li>
+            </ul>
+          </div>
+        )}
+
+        {!showOutput && (
+          <div className="mb-4">
+            <label htmlFor="context" className="block text-sm text-gray-400 mb-1">Optional: Context (background info)</label>
+            <textarea
+              id="context"
+              rows={3}
+              placeholder="e.g. We've been arguing a lot lately, and I feel like I'm going crazy..."
+              className="w-full p-3 border border-gray-600 bg-gray-700 rounded text-sm text-white placeholder-gray-400 resize-y mb-4"
+            ></textarea>
+          </div>
+        )}
 
         {showOutput ? (
           <div>
@@ -93,7 +122,7 @@ export default function Home() {
             value={text}
             onChange={e => setText(e.target.value)}
             rows={12}
-            placeholder="Paste your conversation here..."
+            placeholder="Paste a conversation or series of replies here — separate messages with line breaks."
             className="w-full p-4 border border-gray-600 bg-gray-700 rounded mb-4 text-sm text-white placeholder-gray-400 resize-y"
           ></textarea>
         )}
@@ -104,6 +133,11 @@ export default function Home() {
         >
           Analyze
         </button>
+
+        <div className="mt-8 text-center text-xs text-gray-500">
+          Created by <span className="text-white font-semibold">OutPatiented</span> • Powered by <span className="text-white font-semibold">TruthEngine</span><br />
+          If this helped you, consider donating: <a href="https://coff.ee/truthengine" target="_blank" className="text-pink-400 hover:underline">coff.ee/truthengine</a>
+        </div>
 
         {results.length > 0 && (
           <div className="mt-6">
