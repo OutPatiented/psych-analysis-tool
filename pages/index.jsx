@@ -78,21 +78,9 @@ export default function Home() {
           <div className="mb-4 text-sm text-gray-300">
             <ul className="list-disc list-inside space-y-1">
               <li><strong>What to Paste:</strong> Copy either full conversations or just the replies from the suspected manipulator.</li>
-              <li><strong>Best Format:</strong> Use line breaks between each message for clarity.</li>
+              <li><strong>Best Format:</strong> Use line breaks (press 'Enter' after each message) between each message for clarity.</li>
               <li><strong>Optional:</strong> Add extra background context below to improve interpretation.</li>
             </ul>
-          </div>
-        )}
-
-        {!showOutput && (
-          <div className="mb-4">
-            <label htmlFor="context" className="block text-sm text-gray-400 mb-1">Optional: Context (background info)</label>
-            <textarea
-              id="context"
-              rows={3}
-              placeholder="e.g. We've been arguing a lot lately, and I feel like I'm going crazy..."
-              className="w-full p-3 border border-gray-600 bg-gray-700 rounded text-sm text-white placeholder-gray-400 resize-y mb-4"
-            ></textarea>
           </div>
         )}
 
@@ -118,13 +106,25 @@ export default function Home() {
             </div>
           </div>
         ) : (
-          <textarea
-            value={text}
-            onChange={e => setText(e.target.value)}
-            rows={12}
-            placeholder="Paste a conversation or series of replies here — separate messages with line breaks."
-            className="w-full p-4 border border-gray-600 bg-gray-700 rounded mb-4 text-sm text-white placeholder-gray-400 resize-y"
-          ></textarea>
+          <>
+            <textarea
+              value={text}
+              onChange={e => setText(e.target.value)}
+              rows={12}
+              placeholder="Paste a conversation or series of replies here — separate messages with line breaks."
+              className="w-full p-4 border border-gray-600 bg-gray-700 rounded mb-4 text-sm text-white placeholder-gray-400 resize-y"
+            ></textarea>
+
+            <div className="mb-4">
+              <label htmlFor="context" className="block text-sm text-gray-400 mb-1">Optional: Context (background info)</label>
+              <textarea
+                id="context"
+                rows={3}
+                placeholder="e.g. We've been arguing a lot lately, and I feel like I'm going crazy..."
+                className="w-full p-3 border border-gray-600 bg-gray-700 rounded text-sm text-white placeholder-gray-400 resize-y mb-4"
+              ></textarea>
+            </div>
+          </>
         )}
 
         <button
