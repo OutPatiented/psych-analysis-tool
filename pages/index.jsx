@@ -5,16 +5,22 @@ const tactics = [
   {
     name: "Gaslighting",
     keywords: [
-      "you’re remembering it wrong",
+      "remembering it wrong",
       "that never happened",
-      "you always twist things",
-      "you sound paranoid",
-      "you’re being dramatic",
-      "you misinterpreted everything",
-      "you imagined that",
-      "I never said that",
-      "you're just emotional",
-      "are you sure that happened"
+      "you always twist",
+      "sound paranoid",
+      "being dramatic",
+      "misinterpreted everything",
+      "imagined that",
+      "I never said",
+      "just emotional",
+      "are you sure",
+      "not how it happened",
+      "making things up",
+      "your memory is off",
+      "you're confused",
+      "that's not what I meant",
+      "you’re delusional"
     ],
     description: "Making someone question their reality or memory."
   },
@@ -22,10 +28,14 @@ const tactics = [
     name: "DARVO",
     keywords: [
       "how dare you",
-      "you’re the one who",
+      "you’re the one",
       "stop attacking me",
-      "you’re making me the villain",
-      "I’m the one being hurt here"
+      "making me the villain",
+      "I’m the one hurt",
+      "blaming me again",
+      "twist it around",
+      "you’re the abuser",
+      "you started it"
     ],
     description: "Deny, Attack, and Reverse Victim and Offender — flipping the blame."
   },
@@ -33,21 +43,28 @@ const tactics = [
     name: "Blame-shifting",
     keywords: [
       "it’s your fault",
-      "you made me do it",
+      "you made me",
       "if you hadn’t",
-      "you pushed me to this",
-      "look what you made me do"
+      "pushed me to this",
+      "look what you made",
+      "you caused this",
+      "this is on you",
+      "none of this would happen if"
     ],
     description: "Avoiding responsibility by putting the blame on the other person."
   },
   {
     name: "Guilt-tripping",
     keywords: [
-      "if you really loved me",
-      "after everything I've done",
-      "I guess I’m just a burden",
-      "you don’t care about me",
-      "I always put you first"
+      "if you really loved",
+      "everything I've done",
+      "just a burden",
+      "don’t care about me",
+      "always put you first",
+      "do everything for you",
+      "nobody appreciates",
+      "I sacrificed for you",
+      "after all I've done"
     ],
     description: "Using guilt to manipulate someone’s behavior."
   },
@@ -55,54 +72,74 @@ const tactics = [
     name: "Emotional Invalidation",
     keywords: [
       "you’re overreacting",
-      "you’re too sensitive",
-      "stop being so emotional",
-      "you always get like this",
-      "it’s not a big deal"
+      "too sensitive",
+      "so emotional",
+      "always get like this",
+      "not a big deal",
+      "being irrational",
+      "take everything personally",
+      "stop being dramatic",
+      "you're imagining things"
     ],
     description: "Dismissing or minimizing someone’s emotional experience."
   },
   {
     name: "Threats",
     keywords: [
-      "you’ll regret this",
-      "don’t make me do something I’ll regret",
+      "you’ll regret",
+      "don’t make me",
       "you’ll be sorry",
-      "I’ll ruin your life",
-      "you won’t have anyone"
+      "ruin your life",
+      "won’t have anyone",
+      "lose everything",
+      "make you pay",
+      "you’ll see what happens",
+      "you’re dead to me"
     ],
     description: "Using fear or intimidation to control behavior."
   },
   {
     name: "Conditional Approval",
     keywords: [
-      "if you do this, I’ll love you",
-      "why can’t you just be what I need",
-      "you’re only good when you listen",
+      "if you do this",
+      "why can’t you",
+      "only good when",
       "prove you care",
-      "earn my trust"
+      "earn my trust",
+      "lovable when you obey",
+      "I’ll be nice if",
+      "if you loved me you would",
+      "you have to deserve my respect"
     ],
     description: "Withholding love or acceptance until demands are met."
   },
   {
     name: "Minimization",
     keywords: [
-      "you’re making a big deal out of nothing",
-      "it was just a joke",
-      "I didn’t mean it like that",
-      "you’re so dramatic",
-      "you’re blowing it out of proportion"
+      "big deal out of nothing",
+      "just a joke",
+      "didn’t mean it",
+      "so dramatic",
+      "blowing it out",
+      "take a joke",
+      "too emotional",
+      "you’re exaggerating",
+      "wasn’t that serious"
     ],
     description: "Downplaying harm done to avoid accountability."
   },
   {
     name: "Deflection",
     keywords: [
-      "let’s not talk about this",
-      "why are you bringing this up now",
-      "this isn’t about me",
-      "you’re just trying to start a fight",
-      "don’t change the subject"
+      "not talk about this",
+      "bringing this up",
+      "isn’t about me",
+      "trying to start a fight",
+      "don’t change the subject",
+      "bring up old stuff",
+      "ruin the mood",
+      "you always do this",
+      "why now"
     ],
     description: "Avoiding the topic or turning attention away from the issue."
   },
@@ -110,10 +147,14 @@ const tactics = [
     name: "Projection",
     keywords: [
       "you’re the liar",
-      "you cheat all the time",
-      "you don’t even care",
-      "you’re always angry",
-      "you’re manipulative"
+      "you cheat",
+      "don’t even care",
+      "always angry",
+      "you’re manipulative",
+      "you’re abusive",
+      "you gaslight",
+      "you’re controlling",
+      "you’re the narcissist"
     ],
     description: "Accusing someone else of traits or behaviors the manipulator is exhibiting."
   }
@@ -128,8 +169,12 @@ export default function Home() {
     const foundTactics = [];
 
     tactics.forEach(tactic => {
-      const hit = tactic.keywords.some(keyword => lowerText.includes(keyword.toLowerCase()));
-      if (hit) foundTactics.push(tactic);
+      for (const keyword of tactic.keywords) {
+        if (lowerText.includes(keyword)) {
+          foundTactics.push(tactic);
+          break;
+        }
+      }
     });
 
     setResults(foundTactics);
