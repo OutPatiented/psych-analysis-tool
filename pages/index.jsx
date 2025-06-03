@@ -63,10 +63,10 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-6 font-sans">
       <div className="max-w-2xl mx-auto bg-gray-800 p-8 rounded-xl shadow-lg">
-        <h1 className="text-3xl font-bold mb-1 text-pink-400">🧠 Gaslight Detector</h1>
+        <h1 className="text-3xl font-bold mb-3 text-pink-400 text-center">🧠 Gaslight Detector</h1>
         {showOutput && (
           <div className="mb-3 text-xs text-center text-gray-400">
-            Created by <span className="text-white font-semibold">OutPatiented</span>, built on <span className="text-white font-semibold">TruthEngine</span> — support us at <a href="https://coff.ee/truthengine" target="_blank" className="text-pink-400 underline">coff.ee/truthengine</a>
+            Created by <span className="text-white font-semibold">OutPatiented</span>, built on <span className="text-white font-semibold">TruthEngine</span> — <a href="https://coff.ee/truthengine" target="_blank" className="text-pink-400 underline font-bold">☕ Buy me a coffee if this helped you</a>
           </div>
         )}
 
@@ -103,6 +103,17 @@ export default function Home() {
               >
                 📋 Copy Results
               </button>
+              <button
+                onClick={() => {
+                  setText("");
+                  setResults([]);
+                  setHighlightedText("");
+                  setShowOutput(false);
+                }}
+                className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-500"
+              >
+                ➕ Analyze Another Conversation
+              </button>
             </div>
           </div>
         ) : (
@@ -136,7 +147,7 @@ export default function Home() {
 
         <div className="mt-8 text-center text-xs text-gray-500">
           Created by <span className="text-white font-semibold">OutPatiented</span> • Powered by <span className="text-white font-semibold">TruthEngine</span><br />
-          If this helped you, consider donating: <a href="https://coff.ee/truthengine" target="_blank" className="text-pink-400 hover:underline">coff.ee/truthengine</a>
+          <a href="https://coff.ee/truthengine" target="_blank" className="text-pink-400 font-semibold hover:underline">☕ Buy me a coffee if this tool helped you</a>
         </div>
 
         {results.length > 0 && (
