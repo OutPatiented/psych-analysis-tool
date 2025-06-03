@@ -1,7 +1,7 @@
 // File: pages/index.jsx
 import { useState } from 'react';
 
-import { tactics } from '../lib/tactics';
+import { tactics } from '../lib/tactics.js';
 
 function highlightMatches(input, matches) {
   let highlighted = input;
