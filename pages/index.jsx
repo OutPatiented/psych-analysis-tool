@@ -7,7 +7,7 @@ function highlightMatches(input, matches) {
   let highlighted = input;
   matches.forEach(phrase => {
     const regex = new RegExp(`(${phrase})`, 'gi');
-    highlighted = highlighted.replace(regex, '<mark>$1</mark>');
+    highlighted = highlighted.replace(regex, '<mark class="bg-yellow-300 text-black px-1 rounded shadow">$1</mark>');
   });
   return highlighted;
 }
@@ -45,40 +45,62 @@ export default function Home() {
     setShowOutput(true);
   };
 
+  const copyResults = () => {
+    const resultText = results.map(r => `${r.name}\n${r.description}\nCategory: ${r.category} | Type: ${r.type}\nMatches: ${r.matches.join(', ')}`).join('\n\n');
+    navigator.clipboard.writeText(resultText);
+  };
+
+  const categoryColor = (category) => {
+    switch (category) {
+      case 'Psychological': return 'bg-gray-600';
+      case 'Emotional': return 'bg-pink-600';
+      case 'Defensive': return 'bg-red-600';
+      case 'Avoidance': return 'bg-yellow-600';
+      default: return 'bg-blue-600';
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-6 font-sans">
       <div className="max-w-2xl mx-auto bg-gray-800 p-8 rounded-xl shadow-lg">
-        <h1 className="text-3xl font-bold mb-4 text-pink-400">🧠 Gaslight Detector</h1>
-        <p className="mb-4 text-sm text-gray-400">
-          Paste any conversation (text, DM, email). We'll scan it for manipulation tactics.
-        </p>
+        <h1 className="text-3xl font-bold mb-1 text-pink-400">🧠 Gaslight Detector</h1>
+        <p className="text-sm text-gray-400 mb-4">Paste any conversation (text, DM, email). We'll scan it for manipulation tactics.</p>
+        <p className="text-xs italic text-gray-500 mb-6">Built to catch the tactics they hope you won’t notice.</p>
 
         {showOutput ? (
           <div>
             <div
-              className="prose prose-sm max-w-none bg-gray-700 p-4 border border-gray-600 rounded mb-4 text-sm"
+              className="prose prose-sm max-w-none bg-gray-700 p-4 border border-gray-600 rounded mb-4 text-sm transition-opacity animate-fade-in"
               dangerouslySetInnerHTML={{ __html: highlightedText.replace(/\n/g, '<br/>') }}
             ></div>
-            <button
-              onClick={() => setShowOutput(false)}
-              className="bg-gray-600 text-sm text-white px-3 py-1 rounded hover:bg-gray-500 mb-4"
-            >
-              📝 Edit Text
-            </button>
+            <div className="flex gap-2 mb-4">
+              <button
+                onClick={() => setShowOutput(false)}
+                className="bg-gray-600 text-sm text-white px-3 py-1 rounded hover:bg-gray-500"
+              >
+                📝 Edit Text
+              </button>
+              <button
+                onClick={copyResults}
+                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-400"
+              >
+                📋 Copy Results
+              </button>
+            </div>
           </div>
         ) : (
           <textarea
             value={text}
             onChange={e => setText(e.target.value)}
-            rows={10}
+            rows={12}
             placeholder="Paste your conversation here..."
-            className="w-full p-4 border border-gray-600 bg-gray-700 rounded mb-4 text-sm text-white placeholder-gray-400"
+            className="w-full p-4 border border-gray-600 bg-gray-700 rounded mb-4 text-sm text-white placeholder-gray-400 resize-y"
           ></textarea>
         )}
 
         <button
           onClick={analyzeText}
-          className="bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-400 transition-colors duration-200"
+          className="bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-400 transition-transform duration-200 hover:scale-105"
         >
           Analyze
         </button>
@@ -88,10 +110,17 @@ export default function Home() {
             <h2 className="text-xl font-semibold mb-2">Results:</h2>
             <ul className="space-y-4">
               {results.map((r, i) => (
-                <li key={i} className="bg-gray-700 p-4 rounded-lg border border-gray-600">
+                <li
+                  key={i}
+                  className="bg-gray-700 p-4 rounded-lg border border-gray-600 animate-fade-in"
+                  style={{ animationDelay: `${i * 100}ms`, animationFillMode: 'forwards' }}
+                >
                   <div className="text-lg font-bold text-pink-300">{r.name}</div>
                   <div className="text-sm mb-1">{r.description}</div>
-                  <div className="text-xs text-gray-400">Category: {r.category} | Type: {r.type}</div>
+                  <div className="text-xs text-gray-400 flex flex-wrap gap-2 items-center">
+                    <span className={`px-2 py-0.5 rounded text-xs text-white ${categoryColor(r.category)}`}>{r.category}</span>
+                    <span className="px-2 py-0.5 rounded bg-gray-600 text-xs text-white">{r.type}</span>
+                  </div>
                   <div className="text-xs text-gray-500 mt-1">
                     Matched {r.count} phrase{r.count > 1 ? 's' : ''}: {r.matches.join(', ')}
                   </div>
@@ -102,7 +131,7 @@ export default function Home() {
         )}
 
         {results.length === 0 && showOutput && (
-          <p className="text-sm text-gray-400 mt-4">No manipulation tactics detected.</p>
+          <p className="text-sm text-gray-400 mt-4">✅ No manipulation tactics detected. You’re clear.</p>
         )}
       </div>
     </div>
