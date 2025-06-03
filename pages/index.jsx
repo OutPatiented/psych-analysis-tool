@@ -14,9 +14,11 @@ function highlightMatches(input, matches) {
 
 export default function Home() {
   const [text, setText] = useState("");
+  const [context, setContext] = useState("");
   const [results, setResults] = useState([]);
   const [highlightedText, setHighlightedText] = useState("");
   const [showOutput, setShowOutput] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
 
   const analyzeText = () => {
     const lowerText = text.toLowerCase();
@@ -61,112 +63,88 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 p-6 font-sans">
-      <div className="max-w-2xl mx-auto bg-gray-800 p-8 rounded-xl shadow-lg">
-        <h1 className="text-3xl font-bold mb-3 text-pink-400 text-center">🧠 Gaslight Detector</h1>
+    <div className={`${darkMode ? 'bg-gray-900 text-gray-100' : 'bg-white text-black'} min-h-screen p-6 font-sans`}>
+      <header className="flex justify-between items-center mb-6 max-w-5xl mx-auto">
+        <nav className="space-x-4 text-sm">
+          <a href="https://www.outpatiented.com" target="_blank" className="underline hover:text-pink-400">OutPatiented</a>
+          <a href="https://www.outpatiented.com/blog" target="_blank" className="underline hover:text-pink-400">Blog</a>
+        </nav>
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="text-xs border px-2 py-1 rounded bg-gray-700 text-white hover:bg-gray-600"
+        >
+          {darkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
+        </button>
+      </header>
+
+      <div className={`${darkMode ? 'bg-gray-800' : 'bg-gray-100'} max-w-2xl mx-auto p-8 rounded-xl shadow-lg`}>
+        <div className="text-3xl font-bold text-pink-400 text-center mb-3">🧠 Gaslight Detector</div>
+
         {showOutput && (
           <div className="mb-3 text-xs text-center text-gray-400">
-            Created by <span className="text-white font-semibold">OutPatiented</span>, built on <span className="text-white font-semibold">TruthEngine</span> — <a href="https://coff.ee/truthengine" target="_blank" className="text-pink-400 underline font-bold">☕ Buy me a coffee if this helped you</a>
+            Created by <span className="font-semibold">OutPatiented</span>, built on <span className="font-semibold">TruthEngine</span> — <a href="https://coff.ee/truthengine" target="_blank" className="text-pink-400 underline font-bold">☕ Buy me a coffee if this helped you</a>
           </div>
         )}
 
-        <p className="text-sm text-gray-400 mb-2">This tool scans written communication for common psychological manipulation tactics.</p>
-        <p className="text-sm text-gray-400 mb-2">Paste a back-and-forth conversation (DMs, texts, emails) OR only the manipulator's responses. You can include context if needed to help clarify the dynamic.</p>
-        <p className="text-xs italic text-gray-500 mb-4">Context matters. The more you provide, the more accurate the result.</p>
-
         {!showOutput && (
-          <div className="mb-4 text-sm text-gray-300">
-            <ul className="list-disc list-inside space-y-1">
-              <li><strong>What to Paste:</strong> Copy either full conversations or just the replies from the suspected manipulator.</li>
-              <li><strong>Best Format:</strong> Use line breaks (press 'Enter' after each message) between each message for clarity.</li>
-              <li><strong>Optional:</strong> Add extra background context below to improve interpretation.</li>
-            </ul>
-          </div>
+          <>
+            <label className="block mb-2 text-sm font-medium">Paste the full conversation or just the other person's replies (DMs, texts, emails, etc.). Use line breaks (hit 'Enter') between responses.</label>
+            <textarea
+              value={text}
+              onChange={e => setText(e.target.value)}
+              rows={8}
+              placeholder="Paste your conversation here..."
+              className="w-full p-4 border rounded mb-4 text-sm bg-white text-black"
+            ></textarea>
+
+            <label className="block mb-2 text-sm font-medium">Optional Context (e.g. situation, relationship, previous incidents):</label>
+            <textarea
+              value={context}
+              onChange={e => setContext(e.target.value)}
+              rows={3}
+              placeholder="Add any relevant context here..."
+              className="w-full p-4 border rounded mb-4 text-sm bg-white text-black"
+            ></textarea>
+          </>
         )}
 
         {showOutput ? (
           <div>
-            <div
-              className="prose prose-sm max-w-none bg-gray-700 p-4 border border-gray-600 rounded mb-4 text-sm transition-opacity animate-fade-in"
-              dangerouslySetInnerHTML={{ __html: highlightedText.replace(/\n/g, '<br/>') }}
-            ></div>
-            <div className="flex gap-2 mb-4">
-              <button
-                onClick={() => setShowOutput(false)}
-                className="bg-gray-600 text-sm text-white px-3 py-1 rounded hover:bg-gray-500"
-              >
-                📝 Edit Text
-              </button>
-              <button
-                onClick={copyResults}
-                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-400"
-              >
-                📋 Copy Results
-              </button>
-              <button
-                onClick={() => {
-                  setText("");
-                  setResults([]);
-                  setHighlightedText("");
-                  setShowOutput(false);
-                }}
-                className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-500"
-              >
-                ➕ Analyze Another Conversation
-              </button>
-            </div>
+            <div className="prose prose-sm max-w-none bg-white p-4 border rounded mb-4 text-sm text-black" dangerouslySetInnerHTML={{ __html: highlightedText.replace(/\n/g, '<br/>') }} />
+            <button
+              onClick={() => setShowOutput(false)}
+              className="bg-gray-200 text-sm text-black px-3 py-1 rounded hover:bg-gray-300 mb-4"
+            >
+              Analyze Another
+            </button>
+            <button
+              onClick={copyResults}
+              className="bg-blue-600 text-white text-sm px-3 py-1 ml-2 rounded hover:bg-blue-500"
+            >
+              Copy Results
+            </button>
           </div>
         ) : (
-          <>
-            <textarea
-              value={text}
-              onChange={e => setText(e.target.value)}
-              rows={12}
-              placeholder="Paste a conversation or series of replies here — separate messages with line breaks."
-              className="w-full p-4 border border-gray-600 bg-gray-700 rounded mb-4 text-sm text-white placeholder-gray-400 resize-y"
-            ></textarea>
-
-            <div className="mb-4">
-              <label htmlFor="context" className="block text-sm text-gray-400 mb-1">Optional: Context (background info)</label>
-              <textarea
-                id="context"
-                rows={3}
-                placeholder="e.g. We've been arguing a lot lately, and I feel like I'm going crazy..."
-                className="w-full p-3 border border-gray-600 bg-gray-700 rounded text-sm text-white placeholder-gray-400 resize-y mb-4"
-              ></textarea>
-            </div>
-          </>
+          <button
+            onClick={analyzeText}
+            className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
+          >
+            Analyze
+          </button>
         )}
-
-        <button
-          onClick={analyzeText}
-          className="bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-400 transition-transform duration-200 hover:scale-105"
-        >
-          Analyze
-        </button>
-
-        <div className="mt-8 text-center text-xs text-gray-500">
-          Created by <span className="text-white font-semibold">OutPatiented</span> • Powered by <span className="text-white font-semibold">TruthEngine</span><br />
-          <a href="https://coff.ee/truthengine" target="_blank" className="text-pink-400 font-semibold hover:underline">☕ Buy me a coffee if this tool helped you</a>
-        </div>
 
         {results.length > 0 && (
           <div className="mt-6">
-            <h2 className="text-xl font-semibold mb-2">Results:</h2>
-            <ul className="space-y-4">
+            <h2 className="text-xl font-semibold mb-2">Detected Tactics:</h2>
+            <ul className="space-y-2">
               {results.map((r, i) => (
-                <li
-                  key={i}
-                  className="bg-gray-700 p-4 rounded-lg border border-gray-600 animate-fade-in"
-                  style={{ animationDelay: `${i * 100}ms`, animationFillMode: 'forwards' }}
-                >
-                  <div className="text-lg font-bold text-pink-300">{r.name}</div>
-                  <div className="text-sm mb-1">{r.description}</div>
-                  <div className="text-xs text-gray-400 flex flex-wrap gap-2 items-center">
-                    <span className={`px-2 py-0.5 rounded text-xs text-white ${categoryColor(r.category)}`}>{r.category}</span>
-                    <span className="px-2 py-0.5 rounded bg-gray-600 text-xs text-white">{r.type}</span>
+                <li key={i} className="bg-gray-50 p-3 rounded border text-black">
+                  <strong>{r.name}</strong>: {r.description}
+                  <div className="text-xs mt-1">
+                    <span className={`px-2 py-1 rounded text-white ${categoryColor(r.category)}`}>{r.category}</span>
+                    <span className="ml-2 italic text-gray-700">{r.type}</span>
                   </div>
-                  <div className="text-xs text-gray-500 mt-1">
+                  <div className="text-xs text-gray-600 mt-1">
                     Matched {r.count} phrase{r.count > 1 ? 's' : ''}: {r.matches.join(', ')}
                   </div>
                 </li>
@@ -176,7 +154,7 @@ export default function Home() {
         )}
 
         {results.length === 0 && showOutput && (
-          <p className="text-sm text-gray-400 mt-4">✅ No manipulation tactics detected. You’re clear.</p>
+          <p className="text-sm text-gray-500 mt-4">No manipulation tactics detected.</p>
         )}
       </div>
     </div>
